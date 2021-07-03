@@ -1,17 +1,28 @@
+environment:
+  SLS_DEBUG: "*"
+
 service: pitch-deck-viewer
 
 provider:
   name: aws
   runtime: nodejs14.x
 
+layers:
+  nodeCanvas: 
+    package:
+      artifact: infrastructure/aws-lambda/nodeCanvasLib.zip
+
 functions:
   pdfToImageArray:
-    handler: aws-handlers.pdfToImageArrayHandler
+    handler: infrastructure/aws-lambda/handlers.pdfToImageArrayHandler
 
     events:
       - http:
           path: pdf-to-image-array
           method: POST
+
+    layers:
+      - { Ref: NodeCanvasLambdaLayer }
 
 plugins:
   - serverless-plugin-typescript
@@ -19,4 +30,4 @@ plugins:
 
 package:
   include:
-    aws-handlers.ts
+    - infrastructure/aws-lambda/handlers.ts
