@@ -1,0 +1,22 @@
+service: pitch-deck-viewer
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+
+functions:
+  pdfToImageArray:
+    handler: aws-handlers.pdfToImageArrayHandler
+
+    events:
+      - http:
+          path: pdf-to-image-array
+          method: POST
+
+plugins:
+  - serverless-plugin-typescript
+  - serverless-offline
+
+package:
+  include:
+    aws-handlers.ts
