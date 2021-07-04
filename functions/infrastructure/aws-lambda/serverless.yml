@@ -1,0 +1,48 @@
+service: pitch-deck-viewer
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+  memory: 16384
+
+layers:
+  nodeCanvas: 
+    package:
+      artifact: nodeCanvasLib.zip
+
+functions:
+  uploadPitchDeck:
+    handler: handlers.uploadPitchDeckHandler
+
+    events:
+      - http:
+          path: upload-pitchdeck
+          method: POST
+
+    layers:
+      - { Ref: NodeCanvasLambdaLayer }
+
+  getPitchDeckList:
+    handler: handlers.getPitchDeckListHandler
+
+    events:
+      - http:
+          path: pitchdeck-list
+          method: GET
+
+  getPitchDeckImageList:
+    handler: handlers.getPitchDeckImageListHandler
+
+    events:
+      - http:
+          path: pitchdeck-img-list
+          method: GET
+
+
+plugins:
+  - serverless-plugin-typescript
+  - serverless-offline
+
+package:
+  include:
+    - handlers.ts
