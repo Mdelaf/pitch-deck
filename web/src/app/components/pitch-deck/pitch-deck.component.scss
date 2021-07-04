@@ -1,0 +1,12 @@
+:host {
+  width: 100%;
+  display: flex;
+
+  .settings {
+    flex: 2
+  }
+
+  .viewer {
+    flex: 8
+  }
+}
