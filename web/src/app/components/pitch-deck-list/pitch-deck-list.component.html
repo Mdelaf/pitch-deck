@@ -1,0 +1,8 @@
+<mat-form-field appearance="fill">
+  <mat-label>Select PDF to display</mat-label>
+  <mat-select [(value)]="selectedPdf">
+    <mat-option *ngFor="let pdf of pdfOptions" [value]="pdf">
+      {{pdf.name}}
+    </mat-option>
+  </mat-select>
+</mat-form-field>
