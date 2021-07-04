@@ -1,19 +1,19 @@
-export interface StoredPDF {
+export interface PitchDeck {
   name: string
   code: string
   url: string
 }
 
-export interface StoredPDFImage {
-  pdfCode: string
+export interface PitchDeckImage {
+  pitchDeckCode: string
   number: number
   url: string
 }
 
-export interface PDFStorageRepository {
-  storePDF(pdfBinary: Buffer, name: string): Promise<StoredPDF>
-  getPDFList(): Promise<StoredPDF[]>
+export interface StorageRepository {
+  storePitchDeck(binaryFile: Buffer, name: string): Promise<PitchDeck>
+  getPitchDeckList(): Promise<PitchDeck[]>
 
-  storePDFImage(pdfCode: string, imageBinary: Buffer, imageNumber: number): Promise<StoredPDFImage>
-  getPDFImageList(pdfCode: string): Promise<StoredPDFImage[]>
+  storePitchDeckImage(pitchDeckCode: string, binaryImage: Buffer, imageNumber: number): Promise<PitchDeckImage>
+  getPitchDeckImageList(pitchDeckCode: string): Promise<PitchDeckImage[]>
 }

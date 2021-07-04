@@ -6,6 +6,7 @@ service: pitch-deck-viewer
 provider:
   name: aws
   runtime: nodejs14.x
+  memory: 16384
 
 layers:
   nodeCanvas: 
@@ -13,12 +14,12 @@ layers:
       artifact: infrastructure/aws-lambda/nodeCanvasLib.zip
 
 functions:
-  pdfToImageArray:
-    handler: infrastructure/aws-lambda/handlers.pdfToImageArrayHandler
+  uploadPitchDeck:
+    handler: infrastructure/aws-lambda/handlers.uploadPitchDeckHandler
 
     events:
       - http:
-          path: pdf-to-image-array
+          path: upload-pitchdeck
           method: POST
 
     layers:

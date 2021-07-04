@@ -1,20 +1,21 @@
 import { Context, Callback } from 'aws-lambda'
-import { pdfToImageArray } from '../../usecases/pdf-to-image'
-import { LocalPDFStorage } from '../local-storage/filesystem'
+import { uploadPitchDeck } from '../../usecases/upload-pitchdeck'
+import { LocalFilesystemStorage } from '../local-storage/filesystem'
 
 
-export async function pdfToImageArrayHandler(event: any, context: Context, callback: Callback) {
+export async function uploadPitchDeckHandler(event: any, context: Context, callback: Callback) {
   const body = parseBody(event)
-  const pdfName = body?.filename
-  const base64Pdf = body?.base64content
+  const pdName = body?.filename
+  const pdFileType = body?.filetype
+  const pdBase64Content = body?.base64content
 
-  if (!base64Pdf || !pdfName) {
-    callback(undefined, { statusCode: 400, body: 'invalid arguments' })
+  if (!pdName || !pdFileType || !pdBase64Content) {
+    callback(undefined, { statusCode: 400, body: 'missing arguments' })
   }
 
   try {
-    const localStorageRepo = new LocalPDFStorage('./local-bucket')
-    const response = await pdfToImageArray(localStorageRepo, pdfName, base64Pdf)
+    const localStorageRepo = new LocalFilesystemStorage('./local-bucket')
+    const response = await uploadPitchDeck(localStorageRepo, pdName, pdFileType, pdBase64Content)
     callback(undefined, { statusCode: 200, body: JSON.stringify(response) })
   } catch (e) {
     callback(undefined, { statusCode: 400, body: JSON.stringify(e) })

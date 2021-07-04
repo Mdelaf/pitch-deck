@@ -1,48 +1,48 @@
 import fs from 'fs'
-import { PDFStorageRepository, StoredPDF, StoredPDFImage } from '../../domain/storage-repo'
+import { StorageRepository, PitchDeck, PitchDeckImage } from '../../domain/storage-repo'
 import { generateRandomString } from '../utils'
 
 const CODE_LENGTH = 6
 
-export class LocalPDFStorage implements PDFStorageRepository {
+export class LocalFilesystemStorage implements StorageRepository {
   private rootPath: string
 
   constructor(rootPath: string) {
     this.rootPath = rootPath
   }
 
-  async storePDF(pdfBinary: Buffer, name: string): Promise<StoredPDF> {
+  async storePitchDeck(binaryFile: Buffer, name: string): Promise<PitchDeck> {
     const code = generateRandomString(CODE_LENGTH / 2)
-    const fullPath = `${this.rootPath}/pdfs/${code}-${name}`
+    const fullPath = `${this.rootPath}/pitchdecks/${code}-${name}`
     await fs.promises.mkdir(getPath(fullPath), { recursive: true })
-    await fs.promises.writeFile(fullPath, pdfBinary)
+    await fs.promises.writeFile(fullPath, binaryFile)
     const url = `file://${fullPath}`
     return { name, code, url }
   }
   
-  async getPDFList(): Promise<StoredPDF[]> {
-    const pdfsPath = `${this.rootPath}/pdfs`
-    const filenames = await fs.promises.readdir(pdfsPath)
+  async getPitchDeckList(): Promise<PitchDeck[]> {
+    const pitchDecksPath = `${this.rootPath}/pitchdecks`
+    const filenames = await fs.promises.readdir(pitchDecksPath)
     return filenames.map(filename => ({
       name: filename.slice(CODE_LENGTH + 2),
       code: filename.slice(0, CODE_LENGTH + 1),
-      url: `file://${pdfsPath}/${filename}`,
+      url: `file://${pitchDecksPath}/${filename}`,
     }))
   }
 
-  async storePDFImage(pdfCode: string, imageBinary: Buffer, imageNumber: number): Promise<StoredPDFImage> {
-    const fullPath = `${this.rootPath}/images/${pdfCode}/${imageNumber}.png`
+  async storePitchDeckImage(pitchDeckCode: string, binaryImage: Buffer, imageNumber: number): Promise<PitchDeckImage> {
+    const fullPath = `${this.rootPath}/images/${pitchDeckCode}/${imageNumber}.png`
     await fs.promises.mkdir(getPath(fullPath), { recursive: true })
-    await fs.promises.writeFile(fullPath, imageBinary)
+    await fs.promises.writeFile(fullPath, binaryImage)
     const url = `file://${fullPath}`
-    return { pdfCode, number: imageNumber, url }
+    return { pitchDeckCode, number: imageNumber, url }
   }
   
-  async getPDFImageList(pdfCode: string): Promise<StoredPDFImage[]> {
-    const imagesPath = `${this.rootPath}/${pdfCode}`
+  async getPitchDeckImageList(pitchDeckCode: string): Promise<PitchDeckImage[]> {
+    const imagesPath = `${this.rootPath}/${pitchDeckCode}`
     const filenames = await fs.promises.readdir(imagesPath)
     return filenames.map(filename => ({
-      pdfCode,
+      pitchDeckCode,
       number: Number(filename.split('.')[0]),
       url: `file://${imagesPath}/${filename}`,
     }))

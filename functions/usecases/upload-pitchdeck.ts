@@ -1,26 +1,28 @@
-
 import Canvas from 'canvas'
 import { getDocument } from 'pdfjs-dist/legacy/build/pdf'
 import { PDFPageProxy } from 'pdfjs-dist/types/display/api'
-import { PDFStorageRepository } from '../domain/storage-repo'
+import { StorageRepository, PitchDeck } from '../domain/storage-repo'
 
-export async function pdfToImageArray(storageRepo: PDFStorageRepository, pdfName: string, base64Pdf: string): Promise<string[]> {
-  const pdfBinary = Buffer.from(base64Pdf, 'base64')
+export async function uploadPitchDeck(storageRepo: StorageRepository, pdName: string, pdFileType: string, pdBase64Content: string): Promise<PitchDeck> {
+  const pdBinary = Buffer.from(pdBase64Content, 'base64')
+  const pdReference = await storageRepo.storePitchDeck(pdBinary, pdName)
+  
+  if (pdFileType.includes('pdf')) {
+    await storePDFImages(storageRepo, pdReference.code, pdBinary)
+  }
+
+  return pdReference
+}
+
+async function storePDFImages(storageRepo: StorageRepository, pdCode: string, pdfBinary: Buffer) {
   const pdfObject = await getDocument({ data: pdfBinary }).promise
-  const pdfReference = await storageRepo.storePDF(pdfBinary, pdfName)
-
-  const images: string[] = []
-
   let currentPage = 1
   while (currentPage <= pdfObject.numPages) {
     const pdfPage = await pdfObject.getPage(currentPage)
     const pageBinaryImage = await pdfPageToBinaryImage(pdfPage)
-    const imageReference = await storageRepo.storePDFImage(pdfReference.code, pageBinaryImage, currentPage)
-    images.push(imageReference.url)
+    await storageRepo.storePitchDeckImage(pdCode, pageBinaryImage, currentPage)
     currentPage += 1
   }
-
-  return images
 }
 
 async function pdfPageToBinaryImage(pdfPage: PDFPageProxy): Promise<Buffer> {
