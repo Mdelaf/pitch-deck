@@ -1,37 +1,12 @@
-import { Component, OnInit } from '@angular/core';
-
-const weFunderPdf = {
-  name: 'WeFunder',
-  code: 'sadas3',
-}
-
-const cocaColaPdf = {
-  name: 'Coca cola',
-  code: 'isn37j',
-}
-
-const pepsiCoPdf = {
-  name: 'Pepsi Co',
-  code: 'a03jke',
-}
+import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
+import { PdfReference } from 'src/app/services/interfaces';
 
 @Component({
   selector: 'app-pitch-deck-list',
   templateUrl: './pitch-deck-list.component.html',
   styleUrls: ['./pitch-deck-list.component.scss']
 })
-export class PitchDeckListComponent implements OnInit {
-  selectedPdf = cocaColaPdf;
-  
-  pdfOptions = [
-    weFunderPdf,
-    cocaColaPdf,
-    pepsiCoPdf,  
-  ]
-
-  constructor() { }
-
-  ngOnInit(): void {
-  }
-
+export class PitchDeckListComponent {
+  @Input() pdfOptions: PdfReference[] = [];
+  @Output() fileSelectedEvent = new EventEmitter<PdfReference>();
 }
