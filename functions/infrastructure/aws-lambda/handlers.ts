@@ -1,17 +1,19 @@
-import { Handler, Context, Callback } from 'aws-lambda'
+import { Context, Callback } from 'aws-lambda'
 import { pdfToImageArray } from '../../usecases/pdf-to-image'
 
 
 export async function pdfToImageArrayHandler(event: any, context: Context, callback: Callback) {
   const body = parseBody(event)
-  const base64Pdf = body?.base64Pdf
+  const pdfName = body?.filename
+  const base64Pdf = body?.base64content
 
-  if (!base64Pdf) {
+  if (!base64Pdf || !pdfName) {
     callback(undefined, { statusCode: 400, body: 'invalid arguments' })
   }
 
   try {
-    const response = await pdfToImageArray(base64Pdf)
+    const localStorageRepo = undefined
+    const response = await pdfToImageArray(localStorageRepo, pdfName, base64Pdf)
     callback(undefined, { statusCode: 200, body: JSON.stringify(response) })
   } catch (e) {
     callback(undefined, { statusCode: 400, body: JSON.stringify(e) })

@@ -2,10 +2,12 @@
 import Canvas from 'canvas'
 import { getDocument } from 'pdfjs-dist/legacy/build/pdf'
 import { PDFPageProxy } from 'pdfjs-dist/types/display/api'
+import { PDFStorageRepository } from '../domain/storage-repo'
 
-export async function pdfToImageArray(base64Pdf: string): Promise<string[]> {
+export async function pdfToImageArray(storageRepo: PDFStorageRepository, pdfName: string, base64Pdf: string): Promise<string[]> {
   const pdfBinary = Buffer.from(base64Pdf, 'base64')
   const pdfObject = await getDocument({ data: pdfBinary }).promise
+  const pdfReference = await storageRepo.storePDF(pdfBinary, pdfName)
 
   const images: string[] = []
 
@@ -13,9 +15,8 @@ export async function pdfToImageArray(base64Pdf: string): Promise<string[]> {
   while (currentPage <= pdfObject.numPages) {
     const pdfPage = await pdfObject.getPage(currentPage)
     const pageBinaryImage = await pdfPageToBinaryImage(pdfPage)
-    console.log({ currentPage, pageBinaryImage })
-    const imageUrl = await storeBinaryImage(pageBinaryImage)
-    images.push(imageUrl)
+    const imageReference = await storageRepo.storePDFImage(pdfReference.code, pageBinaryImage, currentPage)
+    images.push(imageReference.url)
     currentPage += 1
   }
 
@@ -34,8 +35,4 @@ async function renderPageInCanvas(pdfPage: PDFPageProxy): Promise<Canvas.Canvas>
   const canvasContext = canvas.getContext('2d')
   await pdfPage.render({ canvasContext, viewport }).promise
   return canvas
-}
-
-async function storeBinaryImage(binaryImage: Buffer): Promise<string> {
-  return 'https://wefunder-production.s3.amazonaws.com/2021/logo.svg'
 }
