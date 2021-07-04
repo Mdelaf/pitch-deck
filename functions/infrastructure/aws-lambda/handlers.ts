@@ -1,5 +1,6 @@
 import { Context, Callback } from 'aws-lambda'
 import { pdfToImageArray } from '../../usecases/pdf-to-image'
+import { LocalPDFStorage } from '../local-storage/filesystem'
 
 
 export async function pdfToImageArrayHandler(event: any, context: Context, callback: Callback) {
@@ -12,7 +13,7 @@ export async function pdfToImageArrayHandler(event: any, context: Context, callb
   }
 
   try {
-    const localStorageRepo = undefined
+    const localStorageRepo = new LocalPDFStorage('./local-bucket')
     const response = await pdfToImageArray(localStorageRepo, pdfName, base64Pdf)
     callback(undefined, { statusCode: 200, body: JSON.stringify(response) })
   } catch (e) {
