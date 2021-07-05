@@ -1,23 +1,6 @@
 import { Component } from '@angular/core';
 import { PitchDeckReference } from 'src/app/services/pitch-deck.interfaces';
-
-const weFunderPitchDeck = {
-  name: 'WeFunder',
-  code: 'sadas3',
-  url: 'https://wefunder.com',
-}
-
-const cocaColaPitchDeck = {
-  name: 'Coca cola',
-  code: 'isn37j',
-  url: 'https://wefunder.com',
-}
-
-const pepsiCoPitchDeck = {
-  name: 'Pepsi Co',
-  code: 'a03jke',
-  url: 'https://wefunder.com',
-}
+import { PitchDeckService } from 'src/app/services/pitch-deck.service';
 
 @Component({
   selector: 'app-pitch-deck',
@@ -25,11 +8,14 @@ const pepsiCoPitchDeck = {
   styleUrls: ['./pitch-deck.component.scss']
 })
 export class PitchDeckComponent {
-  pitchDeckList: PitchDeckReference[] = [
-    weFunderPitchDeck,
-    cocaColaPitchDeck,
-    pepsiCoPitchDeck,
-  ];
+  pitchDeckList: PitchDeckReference[] = [];
 
   selectedPitchDeck: PitchDeckReference | undefined;
+
+  constructor(private pitchDeckService: PitchDeckService) {
+    this.pitchDeckService.getPitchDeckList()
+      .subscribe({
+        next: pitchDecks => this.pitchDeckList = pitchDecks,
+      });
+  }
 }
