@@ -1,0 +1,16 @@
+<div *ngIf="pitchDeck">
+  <div>{{pitchDeck.name}} ({{pitchDeck.code}})</div>
+  <a mat-button mat-raised-button color="secondary" class="download-btn" [href]="pitchDeck.url" target="_blank">
+    DOWNLOAD PITCH DECK
+  </a>
+
+  <div class="deck-galery">
+    <img *ngFor="let image of pitchDeck.images" [src]="image.url"/>
+    <div *ngIf="!pitchDeck.images?.length">
+      No images associated to this pitch deck.
+    </div>    
+  </div>
+</div>
+<div *ngIf="!pitchDeck">
+  No pitch deck selected.
+</div>

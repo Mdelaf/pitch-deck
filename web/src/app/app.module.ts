@@ -14,7 +14,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { PitchDeckComponent } from './components/pitch-deck/pitch-deck.component';
 import { PitchDeckListComponent } from './components/pitch-deck-list/pitch-deck-list.component';
 import { PitchDeckUploaderComponent } from './components/pitch-deck-uploader/pitch-deck-uploader.component';
-
+import { PitchDeckViewerComponent } from './components/pitch-deck-viewer/pitch-deck-viewer.component';
 
 
 @NgModule({
@@ -23,6 +23,7 @@ import { PitchDeckUploaderComponent } from './components/pitch-deck-uploader/pit
     PitchDeckComponent,
     PitchDeckListComponent,
     PitchDeckUploaderComponent,
+    PitchDeckViewerComponent,
   ],
   imports: [
     BrowserModule,

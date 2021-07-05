@@ -34,8 +34,19 @@ export class PitchDeckComponent {
     .subscribe({
       next: ([newPitchDeck, pitchDeckList]) => {
         this.pitchDeckList = pitchDeckList as PitchDeckReference[];
-        this.selectedPitchDeck = this.pitchDeckList.find(pd => pd.code === (newPitchDeck as PitchDeckReference).code);
+        const selectedPitchDeck = this.pitchDeckList.find(pd => pd.code === (newPitchDeck as PitchDeckReference).code);
+        this.onPitchDeckSelected(selectedPitchDeck);
       }
     })
+  }
+
+  onPitchDeckSelected(pitchDeck: PitchDeckReference | undefined) {
+    this.selectedPitchDeck = pitchDeck;
+    if (pitchDeck) {
+      this.pitchDeckService.getPitchDeckImageList(pitchDeck.code)
+        .subscribe({
+          next: pitchDeckImages => this.selectedPitchDeck!.images = pitchDeckImages,
+        })
+    }
   }
 }

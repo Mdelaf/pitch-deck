@@ -1,7 +1,14 @@
 <div class="settings">
-  <app-pitch-deck-list [pitchDeckOptions]="pitchDeckList" [(selectedPitchDeck)]="selectedPitchDeck"></app-pitch-deck-list>
-  <app-pitch-deck-uploader (fileSelected)="onFileSelected($event)" [uploadingFile]="uploadingFile"></app-pitch-deck-uploader>
+  <app-pitch-deck-list 
+    [pitchDeckOptions]="pitchDeckList" 
+    [selectedPitchDeck]="selectedPitchDeck"
+    (selectedPitchDeckChange)="onPitchDeckSelected($event)">
+  </app-pitch-deck-list>
+  <app-pitch-deck-uploader
+    (fileSelected)="onFileSelected($event)"
+    [uploadingFile]="uploadingFile">
+  </app-pitch-deck-uploader>
 </div>
 <div class="viewer">
-  <div>pitch deck viewer</div>
+  <app-pitch-deck-viewer [pitchDeck]="selectedPitchDeck"></app-pitch-deck-viewer>
 </div>
