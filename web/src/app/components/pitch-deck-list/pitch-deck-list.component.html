@@ -1,8 +1,8 @@
 <mat-form-field appearance="fill">
   <mat-label>Select pitch deck to display</mat-label>
-  <mat-select (selectionChange)="fileSelectedEvent.emit($event.value)">
+  <mat-select [value]="selectedPitchDeck" (selectionChange)="selectedPitchDeckChange.emit($event.value)">
     <mat-option *ngFor="let pitchDeck of pitchDeckOptions" [value]="pitchDeck">
-      {{pitchDeck.name}}
+      {{pitchDeck.name}} ({{pitchDeck.code}})
     </mat-option>
   </mat-select>
 </mat-form-field>

@@ -8,5 +8,6 @@ import { PitchDeckReference } from 'src/app/services/pitch-deck.interfaces';
 })
 export class PitchDeckListComponent {
   @Input() pitchDeckOptions: PitchDeckReference[] = [];
-  @Output() fileSelectedEvent = new EventEmitter<PitchDeckReference>();
+  @Input() selectedPitchDeck: PitchDeckReference | undefined;
+  @Output() selectedPitchDeckChange = new EventEmitter<PitchDeckReference | undefined>();
 }
