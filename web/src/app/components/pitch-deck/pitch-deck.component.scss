@@ -3,10 +3,14 @@
   display: flex;
 
   .settings {
-    flex: 2
+    flex: 2;
+    height: 70vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
   }
 
   .viewer {
-    flex: 8
+    flex: 8;
   }
 }
