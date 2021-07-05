@@ -1,4 +1,5 @@
 import express from 'express'
+import cors from 'cors'
 import { LocalFilesystemStorage } from "../local-storage/filesystem"
 import { uploadPitchDeck } from "../../usecases/upload-pitchdeck"
 import { getPitchDeckList } from "../../usecases/get-pitchdeck-list"
@@ -12,6 +13,7 @@ const STATIC_URL = `http://localhost:${PORT}${STATIC_PATH}`
 const app = express()
 const storageRepo = new LocalFilesystemStorage(STATIC_DIR, STATIC_URL)
 
+app.use(cors())
 app.use(STATIC_PATH, express.static(STATIC_DIR));
 app.use(express.json({limit: '16mb'}))
 
