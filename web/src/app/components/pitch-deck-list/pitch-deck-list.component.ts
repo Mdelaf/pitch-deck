@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
-import { PdfReference } from 'src/app/services/interfaces';
+import { PitchDeckReference } from 'src/app/services/pitch-deck.interfaces';
 
 @Component({
   selector: 'app-pitch-deck-list',
@@ -7,6 +7,6 @@ import { PdfReference } from 'src/app/services/interfaces';
   styleUrls: ['./pitch-deck-list.component.scss']
 })
 export class PitchDeckListComponent {
-  @Input() pdfOptions: PdfReference[] = [];
-  @Output() fileSelectedEvent = new EventEmitter<PdfReference>();
+  @Input() pitchDeckOptions: PitchDeckReference[] = [];
+  @Output() fileSelectedEvent = new EventEmitter<PitchDeckReference>();
 }
